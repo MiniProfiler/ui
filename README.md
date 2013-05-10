@@ -1,6 +1,6 @@
 # MiniProfiler data structures
 
-This document describes the MiniProfiler data structures.
+This document specifies the MiniProfiler data structures. New languages should use this as the implementation specification.
 
 ## Profile
 
