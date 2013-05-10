@@ -21,7 +21,7 @@ The root element.
  - **Name** (string) - step name
  - **StartMilliseconds** (number) - step start time, in milliseconds since start of request
  - **DurationMilliseconds** (number) - duration of step in milliseconds (including children)
- - **Children** (array of Children, optional) - list of Child steps
+ - **Children** (array of Timing, optional) - array of child steps
  - **CustomTimings** (object, optional) - object with keys as call type ("redis", "sql", etc.) and values as arrays of CustomTiming of recorded calls (does not include child step's custom timings)
 
 ## CustomTiming
