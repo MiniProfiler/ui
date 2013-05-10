@@ -75,8 +75,6 @@ This data should be recorded by the browser and reported back to MiniProfiler.
             ]
         }
     },
-    "User": "",
-    "HasUserViewed": true,
     "ClientTimings": {
         "RedirectCount": 0,
         "Timings": [
