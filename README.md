@@ -1,3 +1,7 @@
+# How this **ui** repo is used
+
+Language implementations should clone this repo as a [submodule](http://git-scm.com/book/en/Git-Tools-Submodules).
+
 # MiniProfiler data structures
 
 This document specifies the MiniProfiler data structures. New languages should use this as the implementation specification.
