@@ -609,18 +609,20 @@ var MiniProfiler = (function () {
           var _send = XMLHttpRequest.prototype.send;
 
           XMLHttpRequest.prototype.send = function sendReplacement(data) {
-            this._onreadystatechange = this.onreadystatechange;
+            if (this.onreadystatechange) {
+              this._onreadystatechange = this.onreadystatechange;
 
-            this.onreadystatechange = function onReadyStateChangeReplacement() {
-              if (this.readyState == 4) {
-                var stringIds = this.getResponseHeader('X-MiniProfiler-Ids');
-                if (stringIds) {
-                  var ids = typeof JSON != 'undefined' ? JSON.parse(stringIds) : eval(stringIds);
-                  fetchResults(ids);
+              this.onreadystatechange = function onReadyStateChangeReplacement() {
+                if (this.readyState == 4) {
+                  var stringIds = this.getResponseHeader('X-MiniProfiler-Ids');
+                  if (stringIds) {
+                    var ids = typeof JSON != 'undefined' ? JSON.parse(stringIds) : eval(stringIds);
+                    fetchResults(ids);
+                  }
                 }
-              }
 
-              return this._onreadystatechange.apply(this, arguments);
+                return this._onreadystatechange.apply(this, arguments);
+              }
             }
 
             return _send.apply(this, arguments);
