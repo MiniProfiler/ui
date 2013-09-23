@@ -21,7 +21,7 @@ var MiniProfiler = (function () {
 
     var getVersionedKey = function (keyPrefix) {
         return keyPrefix + '-' + options.version;
-    }
+    };
 
     var save = function (keyPrefix, value) {
         if (!hasLocalStorage()) { return; }
@@ -38,7 +38,8 @@ var MiniProfiler = (function () {
     };
 
     var load = function (keyPrefix) {
-        if (!hasLocalStorage()) { return null; }
+        // for local dev, allow easy bypassing of cache
+        if (!hasLocalStorage() || window.location.href.indexOf('mpnocache=') > -1) { return null; }
 
         return localStorage[getVersionedKey(keyPrefix)];
     };
@@ -171,11 +172,9 @@ var MiniProfiler = (function () {
     var processTiming = function (json, timing, depth) {
         timing.DurationWithoutChildrenMilliseconds = timing.DurationMilliseconds;
         timing.Depth = depth;
-        timing.IsTrivial = timing.DurationMilliseconds < options.trivialMilliseconds;
         timing.HasCustomTimings = timing.CustomTimings ? true : false;
         timing.HasDuplicateCustomTimings = {};
         json.HasCustomTimings = json.HasCustomTimings || timing.HasCustomTimings;
-        json.HasTrivialTimings = json.HasTrivialTimings || timing.IsTrivial;
 
         if (timing.Children) {
             for (var i = 0; i < timing.Children.length; i++) {
@@ -186,6 +185,10 @@ var MiniProfiler = (function () {
         } else {
             timing.Children = [];
         }
+
+        // do this after subtracting child durations
+        timing.IsTrivial = timing.DurationWithoutChildrenMilliseconds < options.trivialMilliseconds;
+        json.HasTrivialTimings = json.HasTrivialTimings || timing.IsTrivial;
 
         if (timing.CustomTimings) {
             timing.CustomTimingStats = {};
