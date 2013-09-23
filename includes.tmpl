@@ -14,7 +14,7 @@
         <span class="profiler-name">
           <%= Name %> <span class="profiler-overall-duration">(<%= MiniProfiler.formatDuration(DurationMilliseconds) %> ms)</span>
         </span>
-        <span class="profiler-server-time"><%= MachineName %> on <%= MiniProfiler.renderDate(Started) %></span>
+        <span class="profiler-server-time"><%= MachineName %> on <%= Started ? Started.toUTCString() : '' %></span>
       </div>
       <div class="profiler-output">
         <table class="profiler-timings">

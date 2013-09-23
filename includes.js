@@ -150,7 +150,21 @@ var MiniProfiler = (function () {
         json.CustomLinks = json.CustomLinks || {};
         json.TrivialMilliseconds = options.trivialMilliseconds;
         json.Root.ParentTimingId = json.Id;
-        json.Started = new Date(json.Started);
+        
+        // different serializers handle dates differently
+        switch (typeof json.Started) {
+            case 'number':
+                json.Started = new Date(json.Started);
+                break;
+            case 'string':
+                // .NET's JavaScriptSerializer sends dates as /Date(1308024322065)/
+                var array = /-?\d+/.exec(json.Started);
+                if (array.length == 1) {
+                    json.Started = new Date(parseInt(array[0]));
+                }
+                break;
+        }
+
         processTiming(json, json.Root, 0);
     };
 
@@ -767,12 +781,6 @@ var MiniProfiler = (function () {
                 }
             }
             return { Name: name, Duration: "", Start: "" };
-        },
-
-        renderDate: function (jsonDate) { // JavaScriptSerializer sends dates as /Date(1308024322065)/
-            if (jsonDate) {
-                return (typeof jsonDate === 'string') ? new Date(parseInt(jsonDate.replace("/Date(", "").replace(")/", ""), 10)).toUTCString() : jsonDate;
-            }
         },
 
         renderIndent: function (depth) {
