@@ -352,8 +352,7 @@
 }
 .profiler-results .profiler-popup .profiler-timings th,
 .profiler-results .profiler-popup .profiler-timings td {
-  padding-left: 6px;
-  padding-right: 6px;
+  padding:0 2px;
 }
 .profiler-results .profiler-popup .profiler-timings th {
   font-size: 95%;
