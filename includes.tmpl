@@ -21,11 +21,11 @@
           <thead>
             <tr>
               <th></th>
-              <th>duration (ms)</th>
-              <th class="profiler-duration-with-children">with children (ms)</th>
-              <th class="time-from-start">from start (ms)</th>
+              <th title="in milliseconds">duration</th>
+              <th class="profiler-duration-with-children" title="in milliseconds">with children</th>
+              <th class="time-from-start" title="in milliseconds">from start</th>
             <% _.each(CustomTimingStats, function($stat, $name) { %>
-              <th colspan="2"><%= $name.toLowerCase() %> (ms)</th>
+              <th title="in milliseconds (call count)"><%= $name.toLowerCase() %></th>
             <% }); %>
             </tr>
           </thead>
@@ -40,10 +40,10 @@
                 <% } %>
                 <a class="profiler-toggle-duration-with-children" title="toggles column with aggregate child durations">show time with children</a>
               </td>
+              <td class="profiler-duration-with-children"></td>
             <% _.each(CustomTimingStats, function($stat, $name) { %>
-              <td colspan="2" class="profiler-number profiler-percentage-in-sql" title="<%= $stat.Count %> <%= $name.toLowerCase() %> calls spent <%= MiniProfiler.formatDuration($stat.Duration) %> ms of total request time">
-                <%= MiniProfiler.formatDuration($stat.Duration / DurationMilliseconds * 100) %>
-                <span class="profiler-unit">% in <%= $name.toLowerCase() %></span>
+              <td class="profiler-number profiler-percentage-in-sql" title="<%= $stat.Count %> <%= $name.toLowerCase() %> calls spent <%= MiniProfiler.formatDuration($stat.Duration) %> ms of total request time">
+                <%= MiniProfiler.formatDuration($stat.Duration / DurationMilliseconds * 100) %><span class="profiler-unit">% in <%= $name.toLowerCase() %></span>
               </td>
             <% }); %>
             </tr>
@@ -144,17 +144,15 @@
 
   <% _.each(page && page.CustomTimingStats, function($stat, $name) { %>
     <% if (timing.CustomTimings[$name]) { %>
-      <td class="profiler-duration <% if (timing.HasDuplicateCustomTimings[$name]) { %>profiler-warning<% } %>" title="<% if (timing.HasDuplicateCustomTimings[$name]) { %>duplicate calls detected - <% } %>aggregate number of all <%= $name.toLowerCase() %> calls in this step (excludes children)">
-        <a class="profiler-queries-show">
-          <% if (timing.HasDuplicateCustomTimings[$name]) { %><span class="profiler-nuclear">!</span><% } %>
-          <%= timing.CustomTimings[$name].length %> <span class="profiler-unit"><%= $name.toLowerCase() %></span>
+      <td class="profiler-duration <% if (timing.HasDuplicateCustomTimings[$name]) { %>profiler-warning<% } %>">
+        <a class="profiler-queries-show" title="<%= timing.HasDuplicateCustomTimings[$name] ? 'duplicate calls detected! ' : '' %><%= MiniProfiler.formatDuration(timing.CustomTimingStats[$name].Duration) %> ms in <%= timing.CustomTimings[$name].length %> <%= $name %> calls">
+        <% if (timing.HasDuplicateCustomTimings[$name]) { %><span class="profiler-nuclear">!</span><% } %>
+            <%= MiniProfiler.formatDuration(timing.CustomTimingStats[$name].Duration) %>
+            (<%= timing.CustomTimings[$name].length %>)
         </a>
       </td>
-      <td class="profiler-duration" title="aggregate duration of all <%= $name.toLowerCase() %> calls in this step (excludes children)">
-        <%= MiniProfiler.formatDuration(timing.CustomTimingStats[$name].Duration) %>
-      </td>
     <% } else { %>
-      <td colspan="2"></td>
+      <td></td>
     <% } %>
   <% }); %>
 
