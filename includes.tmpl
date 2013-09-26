@@ -2,8 +2,8 @@
 
   <div class="profiler-result">
 
-    <div class="profiler-button <% if (HasDuplicateCustomTimings) { %>profiler-warning<% } %>">
-    <% if (HasDuplicateCustomTimings) { %><span class="profiler-nuclear">!</span><% } %>
+    <div class="profiler-button <% if (HasDuplicateCustomTimings) { %>profiler-warning<% } %>" title="<%= Name %>">
+      <% if (HasDuplicateCustomTimings) { %><span class="profiler-nuclear">!</span><% } %>
       <span class="profiler-number">
         <%= MiniProfiler.formatDuration(DurationMilliseconds) %> <span class="profiler-unit">ms</span>
       </span>
