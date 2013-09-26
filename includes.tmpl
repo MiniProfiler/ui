@@ -145,10 +145,9 @@
   <% _.each(page && page.CustomTimingStats, function($stat, $name) { %>
     <% if (timing.CustomTimings[$name]) { %>
       <td class="profiler-duration <% if (timing.HasDuplicateCustomTimings[$name]) { %>profiler-warning<% } %>">
-        <a class="profiler-queries-show" title="<%= timing.HasDuplicateCustomTimings[$name] ? 'duplicate calls detected! ' : '' %><%= MiniProfiler.formatDuration(timing.CustomTimingStats[$name].Duration) %> ms in <%= timing.CustomTimings[$name].length %> <%= $name %> calls">
-        <% if (timing.HasDuplicateCustomTimings[$name]) { %><span class="profiler-nuclear">!</span><% } %>
-            <%= MiniProfiler.formatDuration(timing.CustomTimingStats[$name].Duration) %>
-            (<%= timing.CustomTimings[$name].length %>)
+        <a class="profiler-queries-show" title="<%= MiniProfiler.formatDuration(timing.CustomTimingStats[$name].Duration) %> ms in <%= timing.CustomTimings[$name].length %> <%= $name %> calls<%= timing.HasDuplicateCustomTimings[$name] ? '; duplicate calls detected!': '' %>">
+        <%= MiniProfiler.formatDuration(timing.CustomTimingStats[$name].Duration) %>
+            (<%= timing.CustomTimings[$name].length %><% if (timing.HasDuplicateCustomTimings[$name]) { %><span class="profiler-nuclear">!</span><% } %>)
         </a>
       </td>
     <% } else { %>
