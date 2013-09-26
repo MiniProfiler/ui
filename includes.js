@@ -270,9 +270,9 @@ var MiniProfiler = (function () {
     };
 
     var toggleHidden = function (popup) {
-        var trivial = popup.find('.profiler-toggle-trivial');
-        var childrenTime = popup.find('.profiler-toggle-duration-with-children');
-        var trivialGaps = popup.parent().find('.profiler-toggle-trivial-gaps');
+        var trivial = popup.find('.profiler-toggle-trivial'),
+            showMore = popup.find('.profiler-toggle-show-more'),
+            trivialGaps = popup.parent().find('.profiler-toggle-trivial-gaps');
 
         var toggleIt = function (node) {
             var link = $(node),
@@ -285,7 +285,7 @@ var MiniProfiler = (function () {
             popupPreventHorizontalScroll(popup);
         };
 
-        childrenTime.add(trivial).add(trivialGaps).click(function () {
+        showMore.add(trivial).add(trivialGaps).click(function () {
             toggleIt(this);
         });
 
@@ -295,7 +295,7 @@ var MiniProfiler = (function () {
         }
         // if option is set, go ahead and show time with children
         if (options.showChildrenTime) {
-            toggleIt(childrenTime);
+            toggleIt(showMore);
         }
     };
 
@@ -342,7 +342,7 @@ var MiniProfiler = (function () {
         popup.children().each(function () { childrenHeight += $(this).height(); });
 
         popup.css({ 'padding-right': childrenHeight > popup.height() ? 40 : 10 });
-    }
+    };
 
     var popupHide = function (button, popup) {
         button.removeClass('profiler-button-active');

@@ -22,8 +22,8 @@
             <tr>
               <th></th>
               <th title="in milliseconds">duration</th>
-              <th class="profiler-duration-with-children" title="in milliseconds">with children</th>
-              <th class="time-from-start" title="in milliseconds">from start</th>
+              <th class="profiler-show-more" title="in milliseconds">with children</th>
+              <th class="time-from-start profiler-show-more" title="in milliseconds">from start</th>
             <% _.each(CustomTimingStats, function($stat, $name) { %>
               <th title="in milliseconds (call count)"><%= $name.toLowerCase() %></th>
             <% }); %>
@@ -36,11 +36,11 @@
             <tr>
               <td colspan="3">
                 <% if (!ClientTimings) { %>
-                <%= MiniProfiler.tmpl("#linksTemplate", _self) %>
+                  <%= MiniProfiler.tmpl("#linksTemplate", _self) %>
                 <% } %>
-                <a class="profiler-toggle-duration-with-children" title="toggles column with aggregate child durations">show time with children</a>
+                <a class="profiler-toggle-show-more">show more</a>
               </td>
-              <td class="profiler-duration-with-children"></td>
+              <td class="profiler-show-more"></td>
             <% _.each(CustomTimingStats, function($stat, $name) { %>
               <td class="profiler-number profiler-percentage-in-sql" title="<%= $stat.Count %> <%= $name.toLowerCase() %> calls spent <%= MiniProfiler.formatDuration($stat.Duration) %> ms of total request time">
                 <%= MiniProfiler.formatDuration($stat.Duration / DurationMilliseconds * 100) %><span class="profiler-unit">% in <%= $name.toLowerCase() %></span>
@@ -135,10 +135,10 @@
     <td class="profiler-duration" title="duration of this step without any children's durations">
       <%= MiniProfiler.formatDuration(timing.DurationWithoutChildrenMilliseconds) %>
     </td>
-    <td class="profiler-duration profiler-duration-with-children" title="duration of this step and its children">
+    <td class="profiler-duration profiler-show-more" title="duration of this step and its children">
       <%= MiniProfiler.formatDuration(timing.DurationMilliseconds) %>
     </td>
-    <td class="profiler-duration time-from-start" title="time elapsed since profiling started">
+    <td class="profiler-duration profiler-show-more time-from-start" title="time elapsed since profiling started">
       <span class="profiler-unit">+</span><%= MiniProfiler.formatDuration(timing.StartMilliseconds) %>
     </td>
 

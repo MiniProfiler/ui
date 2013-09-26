@@ -57,7 +57,7 @@
 .profiler-result {
   font-family: Helvetica, Arial, sans-serif;
 }
-.profiler-result .profiler-toggle-duration-with-children {
+.profiler-result .profiler-toggle-show-more {
   float: right;
 }
 .profiler-result table.profiler-client-timings {
@@ -105,7 +105,7 @@
 .profiler-result .profiler-timings td {
   white-space: nowrap;
 }
-.profiler-result .profiler-timings .profiler-duration-with-children {
+.profiler-result .profiler-timings .profiler-show-more {
   display: none;
 }
 .profiler-result .profiler-timings .profiler-duration {
@@ -352,7 +352,7 @@
 }
 .profiler-results .profiler-popup .profiler-timings th,
 .profiler-results .profiler-popup .profiler-timings td {
-  padding:0 2px;
+  padding: 0 6px;
 }
 .profiler-results .profiler-popup .profiler-timings th {
   font-size: 95%;
