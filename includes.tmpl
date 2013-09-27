@@ -3,10 +3,10 @@
   <div class="profiler-result">
 
     <div class="profiler-button <% if (HasDuplicateCustomTimings) { %>profiler-warning<% } %>" title="<%= Name %>">
-      <% if (HasDuplicateCustomTimings) { %><span class="profiler-nuclear">!</span><% } %>
       <span class="profiler-number">
         <%= MiniProfiler.formatDuration(DurationMilliseconds) %> <span class="profiler-unit">ms</span>
       </span>
+      <% if (HasDuplicateCustomTimings) { %><span class="profiler-nuclear">!</span><% } %>
     </div>
 
     <div class="profiler-popup">
@@ -34,28 +34,34 @@
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="3">
-                <% if (!ClientTimings) { %>
-                  <%= MiniProfiler.tmpl("#linksTemplate", _self) %>
-                <% } %>
-                <a class="profiler-toggle-show-more">show more</a>
-              </td>
-              <td class="profiler-show-more"></td>
-            <% _.each(CustomTimingStats, function($stat, $name) { %>
-              <td class="profiler-number profiler-percentage-in-sql" title="<%= $stat.Count %> <%= $name.toLowerCase() %> calls spent <%= MiniProfiler.formatDuration($stat.Duration) %> ms of total request time">
-                <%= MiniProfiler.formatDuration($stat.Duration / DurationMilliseconds * 100) %><span class="profiler-unit">% in <%= $name.toLowerCase() %></span>
-              </td>
-            <% }); %>
+              <td colspan="2"></td>
+              <td class="profiler-show-more" colspan="2"></td>
             </tr>
           </tfoot>
         </table>
+        
+      <% if (HasCustomTimings) { %>
+          <table class="profiler-custom-timing-overview">
+            <% _.each(CustomTimingStats, function($stat, $name) { %>
+            <tr title="<%= $stat.Count %> <%= $name.toLowerCase() %> calls spent <%= MiniProfiler.formatDuration($stat.Duration) %> ms of total request time">
+              <td class="profiler-number">
+                <%= $name %>:
+              </td>
+              <td class="profiler-number">
+                <%= MiniProfiler.formatDuration($stat.Duration / DurationMilliseconds * 100) %> <span class="profiler-unit">%</span>
+              </td>
+            </tr>
+            <% }); %>
+          </table>
+        <% } %>
+          
         <% if (ClientTimings) { %>
         <table class="profiler-timings profiler-client-timings">
           <thead>
             <tr>
               <th style="text-align:left">client event</th>
               <th>duration</th>
-              <th>from start</th>
+              <th class="profiler-show-more">from start</th>
             </tr>
           </thead>
           <tbody>
@@ -67,7 +73,7 @@
                 <span class="profiler-unit"></span><%= MiniProfiler.formatDuration($value.duration) %>
                 <% } %>
               </td>
-              <td class="profiler-duration time-from-start">
+              <td class="profiler-duration time-from-start profiler-show-more">
                 <span class="profiler-unit">+</span><%= MiniProfiler.formatDuration($value.start) %>
               </td>
             </tr>
@@ -119,6 +125,7 @@
   <% _.each(CustomLinks, function($link, $name) { %>
       <a href="<%= $link %>" class="profiler-custom-link" target="_blank"><%= $name %></a>
   <% }); %>
+  <a class="profiler-toggle-show-more">show more</a>
   <% if (HasTrivialTimings) { %>
   <a class="profiler-toggle-trivial" title="toggles any rows with &lt; <%= TrivialMilliseconds %> ms">
     show trivial
@@ -141,20 +148,18 @@
     <td class="profiler-duration profiler-show-more time-from-start" title="time elapsed since profiling started">
       <span class="profiler-unit">+</span><%= MiniProfiler.formatDuration(timing.StartMilliseconds) %>
     </td>
-
   <% _.each(page && page.CustomTimingStats, function($stat, $name) { %>
     <% if (timing.CustomTimings[$name]) { %>
-      <td class="profiler-duration <% if (timing.HasDuplicateCustomTimings[$name]) { %>profiler-warning<% } %>">
-        <a class="profiler-queries-show" title="<%= MiniProfiler.formatDuration(timing.CustomTimingStats[$name].Duration) %> ms in <%= timing.CustomTimings[$name].length %> <%= $name %> calls<%= timing.HasDuplicateCustomTimings[$name] ? '; duplicate calls detected!': '' %>">
+    <td class="profiler-duration <%= timing.HasDuplicateCustomTimings[$name] ? 'profiler-warning' : '' %>">
+      <a class="profiler-queries-show" title="<%= MiniProfiler.formatDuration(timing.CustomTimingStats[$name].Duration) %> ms in <%= timing.CustomTimings[$name].length %> <%= $name %> calls<%= timing.HasDuplicateCustomTimings[$name] ? '; duplicate calls detected!': '' %>">
         <%= MiniProfiler.formatDuration(timing.CustomTimingStats[$name].Duration) %>
-            (<%= timing.CustomTimings[$name].length %><% if (timing.HasDuplicateCustomTimings[$name]) { %><span class="profiler-nuclear">!</span><% } %>)
-        </a>
-      </td>
+        (<%= timing.CustomTimings[$name].length %><% if (timing.HasDuplicateCustomTimings[$name]) { %><span class="profiler-nuclear">!</span><% } %>)
+      </a>
+    </td>
     <% } else { %>
-      <td></td>
+    <td></td>
     <% } %>
   <% }); %>
-
   </tr>
 
   <% _.each(timing.Children, function($child) { %>

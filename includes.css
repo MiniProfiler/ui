@@ -58,7 +58,7 @@
   font-family: Helvetica, Arial, sans-serif;
 }
 .profiler-result .profiler-toggle-show-more {
-  float: right;
+  float: right !important;
 }
 .profiler-result table.profiler-client-timings {
   margin-top: 10px;
@@ -123,9 +123,15 @@
 .profiler-result .profiler-timings .profiler-queries-duration {
   padding-left: 6px;
 }
-.profiler-result .profiler-timings .profiler-percent-in-sql {
+.profiler-result .profiler-custom-timing-overview {
+    float:right;
+}
+.profiler-result .profiler-custom-timing-overview td {
   white-space: nowrap;
   text-align: right;
+}
+.profiler-result .profiler-custom-timing-overview td:last-child {
+    padding-left: 8px;
 }
 .profiler-result .profiler-timings tfoot td {
   padding-top: 10px;
@@ -243,7 +249,6 @@
 .profiler-result .profiler-nuclear {
   color: #f00;
   font-weight: bold;
-  padding-right: 2px;
 }
 .profiler-result .profiler-nuclear:hover {
   color: #f00;
