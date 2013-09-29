@@ -41,21 +41,21 @@
         </table>
         
       <% if (HasCustomTimings) { %>
-          <table class="profiler-custom-timing-overview">
-            <% _.each(CustomTimingStats, function($stat, $name) { %>
-            <tr title="<%= $stat.Count %> <%= $name.toLowerCase() %> calls spent <%= MiniProfiler.formatDuration($stat.Duration) %> ms of total request time">
-              <td class="profiler-number">
-                <%= $name %>:
-              </td>
-              <td class="profiler-number">
-                <%= MiniProfiler.formatDuration($stat.Duration / DurationMilliseconds * 100) %> <span class="profiler-unit">%</span>
-              </td>
-            </tr>
-            <% }); %>
-          </table>
-        <% } %>
+        <table class="profiler-custom-timing-overview">
+          <% _.each(CustomTimingStats, function($stat, $name) { %>
+          <tr title="<%= $stat.Count %> <%= $name.toLowerCase() %> calls spent <%= MiniProfiler.formatDuration($stat.Duration) %> ms of total request time">
+            <td class="profiler-number">
+              <%= $name %>:
+            </td>
+            <td class="profiler-number">
+              <%= MiniProfiler.formatDuration($stat.Duration / DurationMilliseconds * 100) %> <span class="profiler-unit">%</span>
+            </td>
+          </tr>
+          <% }); %>
+        </table>
+      <% } %>
           
-        <% if (ClientTimings) { %>
+      <% if (ClientTimings) { %>
         <table class="profiler-timings profiler-client-timings">
           <thead>
             <tr>
@@ -79,15 +79,26 @@
             </tr>
             <% }); %>
           </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="3">
-                <%= MiniProfiler.tmpl("#linksTemplate", _self) %>
-              </td>
-            </tr>
-          </tfoot>
         </table>
-        <% } %>
+      <% } %>
+
+      <div class="profiler-links">
+        <a href="<%= MiniProfiler.shareUrl(Id) %>" class="profiler-share-profiler-results" target="_blank">share</a>
+        <% _.each(CustomLinks, function($link, $name) { %>
+          <a href="<%= $link %>" class="profiler-custom-link" target="_blank"><%= $name %></a>
+        <% }); %>
+        <span class="profiler-toggleable-links">
+          <a class="profiler-toggle-hidden-columns" data-toggle-class="profiler-show-more" data-hide-text="less columns">
+            more columns
+          </a>
+          <% if (HasTrivialTimings) { %>
+            <a class="profiler-toggle-trivial" data-toggle-class="profiler-trivial" data-hide-text="hide trivial" title="toggles any rows with &lt; <%= TrivialMilliseconds %> ms duration">
+              show trivial
+            </a>
+          <% } %>
+        </span>
+      </div>
+        
       </div>
     </div>
 
@@ -118,19 +129,6 @@
 
   </div>
 
-</script>
-
-<script id="linksTemplate" type="text/x-jquery-tmpl">
-  <a href="<%= MiniProfiler.shareUrl(Id) %>" class="profiler-share-profiler-results" target="_blank">share</a>
-  <% _.each(CustomLinks, function($link, $name) { %>
-      <a href="<%= $link %>" class="profiler-custom-link" target="_blank"><%= $name %></a>
-  <% }); %>
-  <a class="profiler-toggle-show-more">show more</a>
-  <% if (HasTrivialTimings) { %>
-  <a class="profiler-toggle-trivial" title="toggles any rows with &lt; <%= TrivialMilliseconds %> ms">
-    show trivial
-  </a>
-  <% } %>
 </script>
 
 <script id="timingTemplate" type="text/x-jquery-tmpl">

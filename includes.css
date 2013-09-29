@@ -57,9 +57,6 @@
 .profiler-result {
   font-family: Helvetica, Arial, sans-serif;
 }
-.profiler-result .profiler-toggle-show-more {
-  float: right !important;
-}
 .profiler-result table.profiler-client-timings {
   margin-top: 10px;
 }
@@ -133,21 +130,20 @@
 .profiler-result .profiler-custom-timing-overview td:last-child {
     padding-left: 8px;
 }
-.profiler-result .profiler-timings tfoot td {
-  padding-top: 10px;
-  text-align: right;
+.profiler-result .profiler-links {
+  margin-top: 10px;
+
 }
-.profiler-result .profiler-timings tfoot td a {
+.profiler-result .profiler-links a {
   font-size: 95%;
   display: inline-block;
   margin-left: 12px;
 }
-.profiler-result .profiler-timings tfoot td a:first-child {
-  float: left;
-  margin-left: 0px;
+.profiler-result .profiler-links a:first-child {
+    margin-left: 0px;
 }
-.profiler-result .profiler-timings tfoot td a.profiler-custom-link {
-  float: left;
+.profiler-result .profiler-toggleable-links {
+float:right;   
 }
 .profiler-result .profiler-queries {
   font-family: Helvetica, Arial, sans-serif;

@@ -271,21 +271,29 @@ var MiniProfiler = (function () {
 
     var toggleHidden = function (popup) {
         var trivial = popup.find('.profiler-toggle-trivial'),
-            showMore = popup.find('.profiler-toggle-show-more'),
+            toggleColumns = popup.find('.profiler-toggle-hidden-columns'),
             trivialGaps = popup.parent().find('.profiler-toggle-trivial-gaps');
 
         var toggleIt = function (node) {
             var link = $(node),
-                klass = "profiler-" + link.attr('class').substr('profiler-toggle-'.length),
-                isHidden = link.text().indexOf('show') > -1;
+                klass = link.data('toggle-class'),
+                hideText = link.data('hide-text'),
+                showText = link.data('show-text'), // first call will be null
+                isHidden = link.text() != hideText;
+
+            // save our initial text to allow reverting
+            if (!showText) {
+                showText = link.text();
+                link.data('show-text', showText);
+            }
 
             popup.parent().find('.' + klass).toggle(isHidden);
-            link.text(link.text().replace(isHidden ? 'show' : 'hide', isHidden ? 'hide' : 'show'));
+            link.text(isHidden ? hideText : showText);
 
             popupPreventHorizontalScroll(popup);
         };
 
-        showMore.add(trivial).add(trivialGaps).click(function () {
+        toggleColumns.add(trivial).add(trivialGaps).click(function () {
             toggleIt(this);
         });
 
@@ -295,7 +303,7 @@ var MiniProfiler = (function () {
         }
         // if option is set, go ahead and show time with children
         if (options.showChildrenTime) {
-            toggleIt(showMore);
+            toggleIt(toggleColumns);
         }
     };
 
