@@ -122,6 +122,7 @@
 }
 .profiler-result .profiler-custom-timing-overview {
     float:right;
+    margin:10px 0;
 }
 .profiler-result .profiler-custom-timing-overview td {
   white-space: nowrap;
