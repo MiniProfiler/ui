@@ -132,7 +132,7 @@
 }
 .profiler-result .profiler-links {
   margin-top: 10px;
-
+  clear:both;
 }
 .profiler-result .profiler-links a {
   font-size: 95%;
