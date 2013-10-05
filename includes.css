@@ -281,6 +281,27 @@ float:right;
 .profiler-results.profiler-right .profiler-controls {
   border-left: 1px solid #888888;
 }
+.profiler-results.profiler-bottomleft {
+  left: 0px;
+  top: inherit;
+  bottom: 0px;
+}
+.profiler-results.profiler-bottomleft .profiler-button, 
+.profiler-results.profiler-bottomleft .profiler-controls {
+  border-right: 1px solid #888;
+  border-top: 1px solid #888;
+}
+.profiler-results.profiler-bottomright {
+  right: 0px;
+  top: inherit;
+  bottom: 0px;
+}
+.profiler-results.profiler-bottomright .profiler-button,
+.profiler-results.profiler-bottomright .profiler-controls {
+  border-left: 1px solid #888;
+  border-top: 1px solid #888;
+}
+
 .profiler-results .profiler-button,
 .profiler-results .profiler-controls {
   display: none;
