@@ -384,8 +384,6 @@ var MiniProfiler = (function () {
         
         if (isBottom) {
             var activeButton = result.find('.profiler-button-active');
-            console.log("button offset top: " + activeButton.offset().top);
-            console.log("button outer height: " + activeButton.outerHeight());
             var isLeft = options.renderPosition.indexOf("left") != -1,
                 top = 0 - activeButton.offset().top + px;  // 0 - offset of button from top of screen + default margin from top
                                                            // is negative because baseline is at bottom of screen, need to move up
