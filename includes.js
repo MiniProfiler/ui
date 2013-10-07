@@ -337,11 +337,23 @@ var MiniProfiler = (function () {
     var popupSetDimensions = function (button, popup) {
         var top = button.position().top - 1, // position next to the button we clicked
             windowHeight = $(window).height(),
-            maxHeight = windowHeight - top - 40; // make sure the popup doesn't extend below the fold
+            maxHeight = windowHeight - top - 40, // make sure the popup doesn't extend below the fold
+            isBottom = options.renderPosition.indexOf("bottom") != -1; // is this rendering on the bottom (if no, then is top by default)
 
-        popup
-            .css({ 'top': top, 'max-height': maxHeight })
-            .css(options.renderPosition, button.outerWidth() - 3); // move left or right, based on config
+        if (isBottom) {
+            var bottom = $(window).height() - button.offset().top - button.outerHeight(), // get bottom of button
+                isLeft = options.renderPosition.indexOf("left") != -1;
+
+            var horizontalPosition = isLeft ? "left" : "right";
+            popup
+                .css({ 'bottom': bottom, 'max-height': maxHeight })
+                .css(horizontalPosition, button.outerWidth() - 3); // move left or right, based on config
+        }
+        else {
+            popup
+                .css({ 'top': top, 'max-height': maxHeight })
+                .css(options.renderPosition, button.outerWidth() - 3); // move left or right, based on config
+        }
     };
 
     var popupPreventHorizontalScroll = function (popup) {
@@ -367,10 +379,29 @@ var MiniProfiler = (function () {
 
         // opaque background
         $('<div class="profiler-queries-bg"/>').appendTo('body').css({ 'height': $(document).height() }).show();
+        
+        var isBottom = options.renderPosition.indexOf("bottom") != -1;
+        
+        if (isBottom) {
+            var activeButton = result.find('.profiler-button-active');
+            console.log("button offset top: " + activeButton.offset().top);
+            console.log("button outer height: " + activeButton.outerHeight());
+            var isLeft = options.renderPosition.indexOf("left") != -1,
+                top = 0 - activeButton.offset().top + px;  // 0 - offset of button from top of screen + default margin from top
+                                                           // is negative because baseline is at bottom of screen, need to move up
 
+            var horizontalPosition = isLeft ? "left" : "right";
+            queries.css({ 'top': top })
+                   .css(horizontalPosition, px);
+        } else {
+            queries.css({ 'top': px })
+                   .css(options.renderPosition, px);
+        }
+        
         // center the queries and ensure long content is scrolled
-        queries.css({ 'top': px, 'max-height': height, 'width': width }).css(options.renderPosition, px)
-            .find('table').css({ 'width': width });
+        queries.css({ 'max-height': height, 'width': width })
+               .find('table').css({ 'width': width });
+
 
         // have to show everything before we can get a position for the first query
         queries.show();
