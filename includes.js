@@ -756,7 +756,7 @@ var MiniProfiler = (function () {
                     } else {
                         $('head').append($('<link rel="stylesheet" type="text/css" href="' + url + '" />'));
                     }
-                    if (!$.tmpl) {
+                    if (!$.tmpl && !window._) {
                         load(options.path + 'underscore.js?v=' + options.version, doInit);
                     } else {
                         doInit();
