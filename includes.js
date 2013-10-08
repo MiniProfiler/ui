@@ -233,8 +233,13 @@ var MiniProfiler = (function () {
     };
 
     var template = function (name, o) {
+        var templateSettings = {
+            evaluate: /<%([\s\S]+?)%>/g,
+            interpolate: /<%=([\s\S]+?)%>/g,
+            escape: /<%-([\s\S]+?)%>/g
+        };
         try {
-            var tmpl = tmplCache[name] || (tmplCache[name] = _.template($(name).html()));
+            var tmpl = tmplCache[name] || (tmplCache[name] = _.template($(name).html(), null, templateSettings));
             o._self = o;
             var html = tmpl(o);
             return html;
