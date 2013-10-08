@@ -255,7 +255,7 @@ float:right;
   position: fixed;
   top: 0px;
 }
-.profiler-results.profiler-left {
+.profiler-results.profiler-left, .profiler-results.profiler-bottomleft {
   left: 0px;
 }
 .profiler-results.profiler-left.profiler-no-controls .profiler-result:last-child .profiler-button,
@@ -265,10 +265,12 @@ float:right;
   border-bottom-right-radius: 10px;
 }
 .profiler-results.profiler-left .profiler-button,
-.profiler-results.profiler-left .profiler-controls {
+.profiler-results.profiler-left .profiler-controls,
+.profiler-results.profiler-bottomleft .profiler-button,
+.profiler-results.profiler-bottomleft .profiler-controls {
   border-right: 1px solid #888888;
 }
-.profiler-results.profiler-right {
+.profiler-results.profiler-right, .profiler-results.profiler-bottomright  {
   right: 0px;
 }
 .profiler-results.profiler-right.profiler-no-controls .profiler-result:last-child .profiler-button,
@@ -278,28 +280,31 @@ float:right;
   border-bottom-left-radius: 10px;
 }
 .profiler-results.profiler-right .profiler-button,
-.profiler-results.profiler-right .profiler-controls {
-  border-left: 1px solid #888888;
-}
-.profiler-results.profiler-bottomleft {
-  left: 0px;
-  top: inherit;
-  bottom: 0px;
-}
-.profiler-results.profiler-bottomleft .profiler-button, 
-.profiler-results.profiler-bottomleft .profiler-controls {
-  border-right: 1px solid #888;
-  border-top: 1px solid #888;
-}
-.profiler-results.profiler-bottomright {
-  right: 0px;
-  top: inherit;
-  bottom: 0px;
-}
+.profiler-results.profiler-right .profiler-controls,
 .profiler-results.profiler-bottomright .profiler-button,
 .profiler-results.profiler-bottomright .profiler-controls {
-  border-left: 1px solid #888;
-  border-top: 1px solid #888;
+  border-left: 1px solid #888888;
+}
+.profiler-results.profiler-bottomleft .profiler-result .profiler-button,
+.profiler-results.profiler-bottomleft .profiler-controls,
+.profiler-results.profiler-bottomright .profiler-result .profiler-button,
+.profiler-results.profiler-bottomright .profiler-controls {
+	border-bottom: 0;
+	border-top: 1px solid #888888;
+}
+.profiler-results.profiler-bottomleft, .profiler-results.profiler-bottomright {
+  top: inherit;
+  bottom: 0px;
+}
+.profiler-results.profiler-bottomleft .profiler-result:first-child .profiler-button {
+  -webkit-border-top-right-radius: 10px;
+  -moz-border-radius-topright: 10px;
+  border-top-right-radius: 10px;
+}
+.profiler-results.profiler-bottomright .profiler-result:first-child .profiler-button {
+  -webkit-border-top-left-radius: 10px;
+  -moz-border-radius-topleft: 10px;
+  border-left-right-radius: 10px;
 }
 
 .profiler-results .profiler-button,
