@@ -304,7 +304,7 @@ float:right;
 .profiler-results.profiler-bottomright .profiler-result:first-child .profiler-button {
   -webkit-border-top-left-radius: 10px;
   -moz-border-radius-topleft: 10px;
-  border-left-right-radius: 10px;
+  border-top-left-radius: 10px;
 }
 
 .profiler-results .profiler-button,
