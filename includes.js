@@ -589,13 +589,17 @@ var MiniProfiler = (function () {
             }
         };
 
-        // fetch profile results for any ajax calls
-        if ($ && $(document) && $(document).ajaxComplete) {
-            $(document).ajaxComplete(jQueryAjaxComplete);
-        }
+        // we need to attach our ajax complete handler to the window's (profiled app's) copy, not our internal, no conflict version
+        var window$ = window.jQuery;
 
-        if ($ && $(document).ajaxStart)
-            $(document).ajaxStart(function () { ajaxStartTime = new Date(); });
+        // fetch profile results for any ajax calls
+        if (window$ && window$(document) && window$(document).ajaxComplete) {
+            window$(document).ajaxComplete(jQueryAjaxComplete);
+
+            if (window$.ajaxStart) {
+                window$(document).ajaxStart(function () { ajaxStartTime = new Date(); });
+            }
+        }
 
         // fetch results after ASP Ajax calls
         if (typeof (Sys) != 'undefined' && typeof (Sys.WebForms) != 'undefined' && typeof (Sys.WebForms.PageRequestManager) != 'undefined') {
