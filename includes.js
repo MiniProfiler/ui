@@ -1,5 +1,5 @@
-﻿"use strict";
 var MiniProfiler = (function () {
+    "use strict";
     var $,
         _
         ;
