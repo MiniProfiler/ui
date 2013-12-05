@@ -131,6 +131,8 @@ var MiniProfiler = (function () {
                     data: { id: id, clientPerformance: clientPerformance, clientProbes: clientProbes, popup: 1 },
                     dataType: 'json',
                     type: 'POST',
+					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+					processData: true,                    
                     success: function (json) {
                         fetchedIds.push(id);
                         if (json != "hidden") {
