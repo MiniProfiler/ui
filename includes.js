@@ -269,7 +269,7 @@ var MiniProfiler = (function () {
 
         // limit count
         if (container.find('.profiler-result').length > options.maxTracesToShow)
-            container.find('.profiler-result').first().remove();
+            resultRemove(container.find('.profiler-result').first());
         button.show();
     };
 
@@ -372,6 +372,16 @@ var MiniProfiler = (function () {
         button.removeClass('profiler-button-active');
         popup.hide();
     };
+
+    var resultRemove = function (result) {
+        var bg = $('.profiler-queries-bg'),
+            queries = result.find('.profiler-queries');
+        var hideQueries = bg.is(':visible') && queries.is(":visible");
+        if (hideQueries) {
+            bg.remove();
+        }
+        result.remove();
+    }
 
     var queriesShow = function (link, result) {
 
