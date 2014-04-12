@@ -513,9 +513,11 @@ var MiniProfiler = (function () {
                 popupHide(button, popup);
             }
         });
-        $(document).bind('keydown', options.toggleShortcut, function(e) {
-            $('.profiler-results').toggle();
-        });
+        if (options.toggleShortcut && !options.toggleShortcut.match(/^None$/i)) {
+            $(document).bind('keydown', options.toggleShortcut, function(e) {
+                $('.profiler-results').toggle();
+            });
+        }
     };
 
     var initFullView = function () {
