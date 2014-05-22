@@ -693,19 +693,22 @@ var MiniProfiler = (function () {
 
           XMLHttpRequest.prototype.send = function sendReplacement(data) {
             if (this.onreadystatechange) {
-              this._onreadystatechange = this.onreadystatechange;
+                if (typeof (this.miniprofiler) == 'undefined' || typeof (this.miniprofiler.prev_onreadystatechange) == 'undefined') {
+                    this.miniprofiler = { prev_onreadystatechange: this.onreadystatechange };
 
-              this.onreadystatechange = function onReadyStateChangeReplacement() {
-                if (this.readyState == 4) {
-                  var stringIds = this.getResponseHeader('X-MiniProfiler-Ids');
-                  if (stringIds) {
-                    var ids = typeof JSON != 'undefined' ? JSON.parse(stringIds) : eval(stringIds);
-                    fetchResults(ids);
-                  }
+                    this.onreadystatechange = function onReadyStateChangeReplacement() {
+                        if (this.readyState == 4) {
+                            var stringIds = this.getResponseHeader('X-MiniProfiler-Ids');
+                            if (stringIds) {
+                                var ids = typeof JSON != 'undefined' ? JSON.parse(stringIds) : eval(stringIds);
+                                fetchResults(ids);
+                            }
+                        }
+
+                        if (this.miniprofiler.prev_onreadystatechange != null)
+                            return this.miniprofiler.prev_onreadystatechange.apply(this, arguments);
+                    };
                 }
-
-                return this._onreadystatechange.apply(this, arguments);
-              }
             }
 
             return _send.apply(this, arguments);
