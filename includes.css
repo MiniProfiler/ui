@@ -181,6 +181,8 @@ float:right;
 .profiler-result .profiler-queries .profiler-info div {
   text-align: right;
   margin-bottom: 5px;
+  word-break: break-word;
+  max-width: 300px;
 }
 .profiler-result .profiler-queries .profiler-gap-info,
 .profiler-result .profiler-queries .profiler-gap-info td {
