@@ -397,33 +397,14 @@ var MiniProfiler = (function () {
 
         var px = 30,
             win = $(window),
-            width = win.width() - 2 * px,
             height = win.height() - 2 * px,
             queries = result.find('.profiler-queries');
 
         // opaque background
         $('<div class="profiler-queries-bg"/>').appendTo('body').css({ 'height': $(document).height() }).show();
         
-        var isBottom = options.renderPosition.indexOf("bottom") != -1;
-        
-        if (isBottom) {
-            var activeButton = result.find('.profiler-button-active');
-            var isLeft = options.renderPosition.indexOf("left") != -1,
-                top = 0 - activeButton.offset().top + px;  // 0 - offset of button from top of screen + default margin from top
-                                                           // is negative because baseline is at bottom of screen, need to move up
-
-            var horizontalPosition = isLeft ? "left" : "right";
-            queries.css({ 'top': top })
-                   .css(horizontalPosition, px);
-        } else {
-            queries.css({ 'top': px })
-                   .css(options.renderPosition, px);
-        }
-        
         // center the queries and ensure long content is scrolled
-        queries.css({ 'max-height': height, 'width': width })
-               .find('table').css({ 'width': width });
-
+        queries.css({ 'max-height': height });
 
         // have to show everything before we can get a position for the first query
         queries.show();
