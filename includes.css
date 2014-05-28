@@ -392,7 +392,10 @@ float:right;
 .profiler-results .profiler-queries {
   display: none;
   z-index: 2147483643;
-  position: absolute;
+  top: 30px;
+  left: 30px;
+  right: 30px;
+  position: fixed;
   overflow-y: auto;
   overflow-x: auto;
   background-color: #fff;
