@@ -981,7 +981,9 @@ var MiniProfiler = (function () {
 
         formatDuration: function (duration) {
             return (duration || 0).toFixed(1);
-        }
+        },
+
+        fetchResults: fetchResults
     };
 })();
 
