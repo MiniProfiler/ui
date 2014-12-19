@@ -648,6 +648,11 @@ var MiniProfiler = (function () {
         if (typeof (Ext) != 'undefined' && typeof (Ext.Ajax) != 'undefined' && typeof (Ext.Ajax.on) != 'undefined') {
             // Ext.Ajax is a singleton, so we just have to attach to its 'requestcomplete' event
             Ext.Ajax.on('requestcomplete', function(e, xhr, settings) {
+                //iframed file uploads don't have headers
+                if (!xhr || !xhr.getResponseHeader) {
+                    return;
+                }
+
                 var stringIds = xhr.getResponseHeader('X-MiniProfiler-Ids');
                 if (stringIds) {
                     var ids = typeof JSON != 'undefined' ? JSON.parse(stringIds) : eval(stringIds);
