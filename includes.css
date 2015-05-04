@@ -484,3 +484,12 @@ float:right;
   text-align: right;
   margin-bottom: 5px;
 }
+table.profiler-results-index  { border: 0; border-spacing:0;}
+table.profiler-results-index tbody tr:nth-child(odd) { background-color:#eee; }
+table.profiler-results-index tbody tr:nth-child(even) { background-color:#fff; }
+table.profiler-results-index tr {border: 0;}
+table.profiler-results-index thead tr {background-color: #bbb; color: #444; font-size: 12px;}
+table.profiler-results-index thead tr th { padding: 5px 15px;}
+table.profiler-results-index td {padding: 8px;}
+.profiler-results-index-date {font-size: 11px; color: #666;}
+.profiler-results-index-time {text-align:center;}
