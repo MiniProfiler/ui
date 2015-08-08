@@ -673,7 +673,7 @@ var MiniProfiler = (function () {
           });
         }
 
-        // add support for AngularJS, which use the basic XMLHttpRequest object.
+        // add support for AngularJS, which uses the basic XMLHttpRequest object.
         if (window.angular && typeof (XMLHttpRequest) != 'undefined') {
           var _send = XMLHttpRequest.prototype.send;
 
@@ -693,6 +693,22 @@ var MiniProfiler = (function () {
 
                         if (this.miniprofiler.prev_onreadystatechange != null)
                             return this.miniprofiler.prev_onreadystatechange.apply(this, arguments);
+                    };
+                }
+            }
+			else if (this.onload) {
+                if (typeof (this.miniprofiler) == 'undefined' || typeof (this.miniprofiler.prev_onload) == 'undefined') {
+                    this.miniprofiler = { prev_onload: this.onload };
+
+                    this.onload = function onLoadReplacement() {
+						var stringIds = this.getResponseHeader('X-MiniProfiler-Ids');
+						if (stringIds) {
+							var ids = typeof JSON != 'undefined' ? JSON.parse(stringIds) : eval(stringIds);
+							fetchResults(ids);
+						}
+
+                        if (this.miniprofiler.prev_onload != null)
+                            return this.miniprofiler.prev_onload.apply(this, arguments);
                     };
                 }
             }
