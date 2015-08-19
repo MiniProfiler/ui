@@ -696,16 +696,16 @@ var MiniProfiler = (function () {
                     };
                 }
             }
-			else if (this.onload) {
+	    else if (this.onload) {
                 if (typeof (this.miniprofiler) == 'undefined' || typeof (this.miniprofiler.prev_onload) == 'undefined') {
                     this.miniprofiler = { prev_onload: this.onload };
 
                     this.onload = function onLoadReplacement() {
-						var stringIds = this.getResponseHeader('X-MiniProfiler-Ids');
-						if (stringIds) {
-							var ids = typeof JSON != 'undefined' ? JSON.parse(stringIds) : eval(stringIds);
-							fetchResults(ids);
-						}
+			var stringIds = this.getResponseHeader('X-MiniProfiler-Ids');
+			if (stringIds) {
+			    var ids = typeof JSON != 'undefined' ? JSON.parse(stringIds) : eval(stringIds);
+			    fetchResults(ids);
+			}
 
                         if (this.miniprofiler.prev_onload != null)
                             return this.miniprofiler.prev_onload.apply(this, arguments);
