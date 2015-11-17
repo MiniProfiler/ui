@@ -213,17 +213,22 @@ var MiniProfiler = (function () {
                     Count: 0
                 };
                 var duplicates = {};
+                var commandTextSanitizing = /(DECLARE .*\n)/g;
+
                 for (var i = 0; i < customTimings.length; i++) {
                     var customTiming = customTimings[i];
                     customTiming.ParentTimingId = timing.Id;
                     customStat.Duration += customTiming.DurationMilliseconds;
                     customStat.Count++;
-                    if (customTiming.CommandString && duplicates[customTiming.CommandString]) {
-                        customTiming.IsDuplicate = true;
-                        timing.HasDuplicateCustomTimings[customType] = true;
-                        json.HasDuplicateCustomTimings = true;
-                    } else {
-                        duplicates[customTiming.CommandString] = true;
+                    if (customTiming.CommandString) {
+                        var sanitizedCommandString = customTiming.CommandString.replace(commandTextSanitizing, '');
+                        if (duplicates[sanitizedCommandString]) {
+                            customTiming.IsDuplicate = true;
+                            timing.HasDuplicateCustomTimings[customType] = true;
+                            json.HasDuplicateCustomTimings = true;
+                        } else {
+                            duplicates[sanitizedCommandString] = true;
+                        }
                     }
                 }
                 timing.CustomTimingStats[customType] = customStat;
