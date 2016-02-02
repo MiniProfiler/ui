@@ -318,6 +318,7 @@ float:right;
   z-index: 2147483640;
   border-bottom: 1px solid #888888;
   background-color: #fff;
+  animation: new-entry 5s 1;
   padding: 4px 7px;
   text-align: right;
   cursor: pointer;
@@ -493,3 +494,12 @@ table.profiler-results-index thead tr th { padding: 5px 15px;}
 table.profiler-results-index td {padding: 8px;}
 .profiler-results-index-date {font-size: 11px; color: #666;}
 .profiler-results-index-time {text-align:center;}
+
+@keyframes new-entry {
+  0% {
+    background-color: #FFFAAA;
+  }
+  100% {
+    background-color: #FFF;
+  }
+}
