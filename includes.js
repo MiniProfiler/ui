@@ -355,7 +355,7 @@ var MiniProfiler = (function () {
             isBottom = options.renderPosition.indexOf("bottom") != -1; // is this rendering on the bottom (if no, then is top by default)
 
         if (isBottom) {
-            var bottom = $(window).height() - button.offset().top - button.outerHeight(), // get bottom of button
+            var bottom = $(window).height() - button.offset().top - button.outerHeight() + $(window).scrollTop(), // get bottom of button
                 isLeft = options.renderPosition.indexOf("left") != -1;
 
             var horizontalPosition = isLeft ? "left" : "right";
