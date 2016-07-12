@@ -20,7 +20,8 @@ var MiniProfiler = (function () {
         tmplCache = {},
         fetchedIds = [],
         fetchingIds = [], // so we never pull down a profiler twice
-        ajaxStartTime
+        ajaxStartTime,
+        savedJson = []
         ;
 
     var hasLocalStorage = function () {
@@ -142,7 +143,7 @@ var MiniProfiler = (function () {
                     dataType: 'json',
                     type: 'POST',
                     contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-                    processData: true,                    
+                    processData: true,
                     success: function (json) {
                         fetchedIds.push(id);
                         if (json != "hidden") {
@@ -165,7 +166,7 @@ var MiniProfiler = (function () {
         json.CustomLinks = json.CustomLinks || {};
         json.TrivialMilliseconds = options.trivialMilliseconds;
         json.Root.ParentTimingId = json.Id;
-        
+
         // different serializers handle dates differently
         switch (typeof json.Started) {
             case 'number':
@@ -258,6 +259,12 @@ var MiniProfiler = (function () {
     };
 
     var buttonShow = function (json) {
+        if (!container) {
+            // container not rendered yet
+            savedJson.push(json);
+            return;
+        }
+
         var result = renderTemplate(json);
 
         if (controls)
@@ -280,7 +287,9 @@ var MiniProfiler = (function () {
         // limit count
         if (container.find('.profiler-result').length > options.maxTracesToShow)
             resultRemove(container.find('.profiler-result').first());
-        button.show();
+
+        // use this rather than .show() as .show won't set it properly if the css hasn't loaded yet
+        button.css('display', 'block');
     };
 
     var toggleHidden = function (popup) {
@@ -402,7 +411,7 @@ var MiniProfiler = (function () {
 
         // opaque background
         $('<div class="profiler-queries-bg"/>').appendTo('body').css({ 'height': $(document).height() }).show();
-        
+
         // center the queries and ensure long content is scrolled
         queries.css({ 'max-height': height });
 
@@ -560,29 +569,7 @@ var MiniProfiler = (function () {
         }
     };
 
-    var initPopupView = function () {
-
-        if (options.authorized) {
-            // all fetched profilings will go in here
-            container = $('<div class="profiler-results"/>').appendTo('body');
-
-            // MiniProfiler.RenderIncludes() sets which corner to render in - default is upper left
-            container.addClass("profiler-" + options.renderPosition);
-
-            //initialize the controls
-            initControls(container);
-
-            // we'll render results json via a jquery.tmpl - after we get the templates, we'll fetch the initial json to populate it
-            fetchTemplates(function () {
-                // get master page profiler results
-                fetchResults(options.ids);
-            });
-            if (options.startHidden) container.hide();
-        }
-        else {
-            fetchResults(options.ids);
-        }
-
+    var installAjaxHandlers = function () {
         var jQueryAjaxComplete = function (e, xhr, settings) {
             if (xhr) {
                 // should be an array of strings, e.g. ["008c4813-9bd7-443d-9376-9441ec4d6a8c","16ff377b-8b9c-4c20-a7b5-97cd9fa7eea7"]
@@ -721,6 +708,34 @@ var MiniProfiler = (function () {
         bindDocumentEvents();
     };
 
+    var initPopupView = function () {
+        if (options.authorized) {
+            // all fetched profilings will go in here
+            container = $('<div class="profiler-results"/>').appendTo('body');
+
+            // MiniProfiler.RenderIncludes() sets which corner to render in - default is upper left
+            container.addClass("profiler-" + options.renderPosition);
+
+            //initialize the controls
+            initControls(container);
+
+            // we'll render results json via a jquery.tmpl - after we get the templates, we'll fetch the initial json to populate it
+            fetchTemplates(function () {
+                // get master page profiler results
+                fetchResults(options.ids);
+            });
+            if (options.startHidden) container.hide();
+
+            // if any data came in before the view popped up, render now
+            for (var i = 0; i < savedJson.length; i++) {
+                buttonShow(savedJson[i]);
+            }
+        }
+        else {
+            fetchResults(options.ids);
+        }
+    };
+
     return {
 
         init: function () {
@@ -811,6 +826,7 @@ var MiniProfiler = (function () {
                 doInit();
             };
 
+            $(installAjaxHandlers);
             $(deferInit);
         },
 
