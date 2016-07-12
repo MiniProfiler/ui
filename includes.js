@@ -1022,6 +1022,19 @@ var MiniProfiler = (function () {
         formatDuration: function (duration) {
             return (duration || 0).toFixed(1);
         },
+		
+		// do not output raw html http://stackoverflow.com/a/6234804/51
+		safeHtml: function(t) {
+			if (!t) {
+				return t;
+			}			
+			return t
+				 .replace(/&/g, "&amp;")
+				 .replace(/</g, "&lt;")
+				 .replace(/>/g, "&gt;")
+				 .replace(/"/g, "&quot;")
+				 .replace(/'/g, "&#039;");
+		},
 
         fetchResults: fetchResults,
 

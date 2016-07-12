@@ -133,8 +133,8 @@
 <script id="timingTemplate" type="text/x-jquery-tmpl">
 
   <tr class="<%= timing.IsTrivial ? 'profiler-trivial' : '' %>" data-timing-id="<%= timing.Id %>">
-    <td class="profiler-label" title="<% if (timing.Name && timing.Name.length > 45 ) { %><%= timing.Name %><% } %>">
-      <span class="profiler-indent"><%= MiniProfiler.renderIndent(timing.Depth) %></span> <%= timing.Name.slice(0,45) %><% if (timing.Name && timing.Name.length > 45 ) { %>...<% } %>
+    <td class="profiler-label" title="<% if (timing.Name && timing.Name.length > 45 ) { %><%= MiniProfiler.safeHtml(timing.Name) %><% } %>">
+      <span class="profiler-indent"><%= MiniProfiler.renderIndent(timing.Depth) %></span> <%= MiniProfiler.safeHtml(timing.Name.slice(0,45)) %><% if (timing.Name && timing.Name.length > 45 ) { %>...<% } %>
     </td>
     <td class="profiler-duration" title="duration of this step without any children's durations">
       <%= MiniProfiler.formatDuration(timing.DurationWithoutChildrenMilliseconds) %>
