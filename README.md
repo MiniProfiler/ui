@@ -53,7 +53,7 @@ This data should be recorded by the browser and reported back to MiniProfiler.
 
 ## Example
 
-```
+```json
 {
     "Id": "7659f15a-6c47-4731-2854-67c6f2b92a3f",
     "Name": "goapp.ListFeeds",
@@ -157,7 +157,7 @@ This data should be recorded by the browser and reported back to MiniProfiler.
 
 ### Client Timings example
 
-```
+```json
 {
     "Id": "779f22e9-2c1d-45ae-2677-ae5f34c3f39f",
     "Name": "goapp.Main",
