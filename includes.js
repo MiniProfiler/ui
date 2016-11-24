@@ -426,7 +426,7 @@ var MiniProfiler = (function () {
 
     var queriesScrollIntoView = function (link, queries, whatToScroll) {
         var id = link.closest('tr').attr('data-timing-id'),
-            cells = queries.find('tr[data-timing-id="' + id + '"] td');
+            cells = queries.find('tr[data-timing-id="' + id + '"]');
 
         // ensure they're in view
         whatToScroll.scrollTop(whatToScroll.scrollTop() + cells.first().position().top - 100);
@@ -474,7 +474,7 @@ var MiniProfiler = (function () {
         if (result = /#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])/.exec(color)) return [parseInt(result[1] + result[1], 16), parseInt(result[2] + result[2], 16), parseInt(result[3] + result[3], 16)];
 
         // Look for rgba(0, 0, 0, 0) == transparent in Safari 3
-        if (result = /rgba\(0, 0, 0, 0\)/.exec(color)) return colors['transparent'];
+        if (result = /rgba\(0, 0, 0, 0\)/.exec(color)) return [0,0,0,0];
 
         return null;
     };
@@ -764,6 +764,10 @@ var MiniProfiler = (function () {
                 if (script.getAttribute('data-trivial-milliseconds'))
                     var trivialMilliseconds = parseInt(script.getAttribute('data-trivial-milliseconds'));
 
+                var slowData = script.getAttribute('data-slow-milliseconds')
+                if (slowData)
+                  var slowMilliseconds = JSON && JSON.parse(slowData) || $.parseJSON(slowData);
+
                 if (script.getAttribute('data-trivial') === 'true') var trivial = true;
                 if (script.getAttribute('data-children') == 'true') var children = true;
                 if (script.getAttribute('data-controls') == 'true') var controls = true;
@@ -777,6 +781,7 @@ var MiniProfiler = (function () {
                     renderPosition: position,
                     showTrivial: trivial,
                     trivialMilliseconds: trivialMilliseconds,
+                    slowMilliseconds: slowMilliseconds,
                     showChildrenTime: children,
                     maxTracesToShow: maxTraces,
                     showControls: controls,
@@ -881,6 +886,7 @@ var MiniProfiler = (function () {
 
         getCustomTimings: function (root) {
             var result = [],
+                slowMilliseconds = options.slowMilliseconds,
                 addToResults = function (timing) {
                     if (timing.CustomTimings) {
                         for (var customType in timing.CustomTimings)
@@ -893,6 +899,21 @@ var MiniProfiler = (function () {
                                 // HACK: add info about the parent Timing to each CustomTiming so UI can render
                                 customTiming.ParentTimingName = timing.Name;
                                 customTiming.CallType = customType;
+
+                                if (slowMilliseconds[customType]) {
+                                  if (customTiming.DurationMilliseconds > slowMilliseconds[customType][0]) {
+                                    customTiming.RowClass = "slow";
+                                  }
+
+                                  if (customTiming.DurationMilliseconds > slowMilliseconds[customType][1]) {
+                                    customTiming.RowClass = "very-slow";
+                                  }
+
+                                  if (customTiming.DurationMilliseconds > slowMilliseconds[customType][2]) {
+                                    customTiming.RowClass = "very-very-slow";
+                                  }
+                                }
+
                                 result.push(customTiming);
                             }
                         }

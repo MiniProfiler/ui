@@ -166,8 +166,7 @@
 </script>
 
 <script id="customTimingTemplate" type="text/x-jquery-tmpl">
-
-  <tr class="<% if (i % 2 == 1) { %>profiler-odd<% } %>" data-timing-id="<%= s.ParentTimingId %>">
+  <tr class="<%= s.RowClass %>" data-timing-id="<%= s.ParentTimingId %>">
     <td class="profiler-info">
       <div><%= s.ParentTimingName %></div>
       <div class="profiler-number"><span class="profiler-unit">T+</span><%= MiniProfiler.formatDuration(s.StartMilliseconds) %> <span class="profiler-unit">ms</span></div>
