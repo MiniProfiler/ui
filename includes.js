@@ -56,6 +56,26 @@ var MiniProfiler = (function () {
 
         return localStorage[getVersionedKey(keyPrefix)];
     };
+    
+    var createCookie = function (name, value, days) {
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            var expires = "; expires=" + date.toGMTString();
+        } else var expires = "";
+        document.cookie = name + "=" + value + expires + "; path=/";
+    };
+
+    var readCookie = function (name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    };
 
     var fetchTemplates = function (success) {
         var key = 'templates',
@@ -373,9 +393,11 @@ var MiniProfiler = (function () {
                 .css(horizontalPosition, button.outerWidth() - 3); // move left or right, based on config
         }
         else {
+            var position = container.hasClass("profiler-right") ? "right" : "left";
             popup
                 .css({ 'top': top, 'max-height': maxHeight })
-                .css(options.renderPosition, button.outerWidth() - 3); // move left or right, based on config
+                .css({ 'left': '', 'right': '' })
+                .css(position, button.outerWidth() - 3); // move left or right, based on config
         }
     };
 
@@ -543,7 +565,7 @@ var MiniProfiler = (function () {
 
     var initControls = function (container) {
         if (options.showControls) {
-            controls = $('<div class="profiler-controls"><span class="profiler-min-max">m</span><span class="profiler-clear">c</span></div>').appendTo(container);
+            controls = $('<div class="profiler-controls"><span class="profiler-min-max">m</span><span class="profiler-clear">c</span><span class="profiler-move-aside">&lt;-&gt;</span></div>').appendTo(container);
 
             $('.profiler-controls .profiler-min-max').click(function () {
                 container.toggleClass('profiler-min');
@@ -562,6 +584,13 @@ var MiniProfiler = (function () {
 
             $('.profiler-controls .profiler-clear').click(function () {
                 container.find('.profiler-result').remove();
+            });
+
+            $('.profiler-controls .profiler-move-aside').click(function() {
+                container.toggleClass("profiler-left");
+                container.toggleClass("profiler-right");
+
+                createCookie("miniprofiler.position", container.hasClass("profiler-left") ? "left" : "right");
             });
         }
         else {
@@ -754,7 +783,8 @@ var MiniProfiler = (function () {
                 var ids = script.getAttribute('data-ids');
                 if (ids)  ids = ids.split(',');
 
-                var position = script.getAttribute('data-position');
+                var position = readCookie("miniprofiler.position") || script.getAttribute('data-position');
+                createCookie("miniprofiler.position", position);
 
                 var toggleShortcut = script.getAttribute('data-toggle-shortcut');
 
